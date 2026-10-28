@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>SNCF Delay Map</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #f4f5f8;
+  --surface: #ffffff;
+  --ink: #0f1d33;
+  --ink-2: #48536a;
+  --muted: #7a8398;
+  --line: #dce0e8;
+  --chip: #e9ecf2;
+  --board: #0e1a2e;
+  --board-ink: #f4c430;
+  --board-dim: #9aa6bd;
+  --nodata: #e4e7ed;
+  --stroke: #ffffff;
+  --focus: #2a78d6;
+  --r0: #fbe9d3; --r1: #f6c99a; --r2: #ee9f5f; --r3: #dc6f35; --r4: #b4471f; --r5: #7c2a12;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0a111e; --surface: #111a2b; --ink: #e9edf4; --ink-2: #aeb7c7; --muted: #7f899c;
+    --line: #233049; --chip: #1a2539; --board: #050a14; --board-dim: #8592aa;
+    --nodata: #1d2637; --stroke: #0a111e; --focus: #6da7ec;
+    --r0: #3b2b20; --r1: #69391f; --r2: #9c4a22; --r3: #cf622c; --r4: #f0884c; --r5: #ffbf8a;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0a111e; --surface: #111a2b; --ink: #e9edf4; --ink-2: #aeb7c7; --muted: #7f899c;
+  --line: #233049; --chip: #1a2539; --board: #050a14; --board-dim: #8592aa;
+  --nodata: #1d2637; --stroke: #0a111e; --focus: #6da7ec;
+  --r0: #3b2b20; --r1: #69391f; --r2: #9c4a22; --r3: #cf622c; --r4: #f0884c; --r5: #ffbf8a;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 15px/1.5 var(--body); -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: 24px; padding-block: 28px 48px; display: grid; gap: 20px; }
+@media (max-width: 640px) { .wrap { padding-inline: 16px; padding-block: 20px 36px; } }
+
+header { display: grid; gap: 6px; }
+.eyebrow { font: 600 12px/1 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font: 700 clamp(30px, 4.6vw, 46px)/1.02 var(--display); margin: 0; letter-spacing: -.005em; text-wrap: balance; }
+.status { color: var(--ink-2); font-size: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: #0ca30c; box-shadow: 0 0 0 3px color-mix(in srgb, #0ca30c 25%, transparent); }
+.dot.stale { background: var(--muted); box-shadow: none; }
+
+/* Departure-board strip: the one loud element on the page. */
+.board {
+  background: var(--board); color: var(--board-ink); border-radius: 10px;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  font-variant-numeric: tabular-nums; overflow: hidden;
+}
+.board > div { padding: 14px 18px 16px; display: grid; gap: 2px; border-left: 1px solid rgba(255,255,255,.08); }
+.board > div:first-child { border-left: 0; }
+.board .k { font: 600 11px/1.2 var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--board-dim); }
+.board .v { font: 600 clamp(28px, 3.6vw, 40px)/1 var(--display); }
+.board .s { font-size: 12.5px; color: var(--board-dim); }
+@media (max-width: 720px) {
+  .board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .board > div:nth-child(3) { border-left: 0; }
+  .board > div:nth-child(n+3) { border-top: 1px solid rgba(255,255,255,.08); }
+}
+
+.controls { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: end; }
+.ctl { display: grid; gap: 5px; }
+.ctl > span { font: 600 11px/1 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.seg { display: inline-flex; background: var(--chip); border-radius: 8px; padding: 3px; gap: 2px; flex-wrap: wrap; }
+.seg button {
+  font: 500 14px/1 var(--body); color: var(--ink-2); background: none; border: 0; border-radius: 6px;
+  padding: 8px 12px; cursor: pointer; white-space: nowrap;
+}
+.seg button:hover:not(:disabled) { color: var(--ink); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(10,20,40,.12); }
+.seg button:disabled { opacity: .4; cursor: not-allowed; }
+button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+
+.mapbox { position: relative; padding: 12px; }
+#map { width: 100%; height: auto; display: block; }
+#map path.dept { stroke: var(--stroke); stroke-width: .8; cursor: pointer; transition: opacity .15s; }
+#map path.dept:hover { opacity: .82; }
+#map path.sel { stroke: var(--ink); stroke-width: 2; }
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; padding: 4px 6px 4px; font-size: 12.5px; color: var(--ink-2); }
+.legend .ramp { display: flex; gap: 2px; align-items: end; }
+.legend .ramp div { display: grid; gap: 3px; justify-items: start; }
+.legend .sw { width: 38px; height: 10px; border-radius: 2px; }
+.legend .tick { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.legend .other { display: flex; align-items: center; gap: 6px; }
+.legend .other .sw { width: 14px; }
+.empty-note {
+  position: absolute; inset: 40% 12% auto; text-align: center; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; color: var(--ink-2); font-size: 14px;
+}
+
+.tip {
+  position: absolute; pointer-events: none; background: var(--board); color: #f2f4f8;
+  border-radius: 8px; padding: 9px 11px; font-size: 13px; line-height: 1.4; min-width: 170px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.25); font-variant-numeric: tabular-nums; z-index: 2;
+}
+.tip b { font: 600 16px/1.1 var(--display); display: block; margin-bottom: 3px; }
+.tip .big { color: var(--board-ink); font: 600 20px/1 var(--display); }
+.tip .dim { color: #9aa6bd; }
+
+.side { display: grid; gap: 20px; }
+.detail { padding: 18px 18px 16px; display: grid; gap: 12px; }
+.detail h2 { font: 700 26px/1.05 var(--display); margin: 0; }
+.detail .sub { color: var(--muted); font-size: 13px; }
+.detail .hero { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.detail .hero .n { font: 600 44px/1 var(--display); font-variant-numeric: tabular-nums; }
+.detail .hero .l { color: var(--ink-2); font-size: 14px; }
+.kv { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; margin: 0; }
+.kv div { display: flex; justify-content: space-between; gap: 8px; border-bottom: 1px solid var(--line); padding-bottom: 5px; font-size: 14px; }
+.kv dt { color: var(--ink-2); }
+.kv dd { margin: 0; font-variant-numeric: tabular-nums; font-weight: 600; }
+.detail h3 { font: 600 11px/1 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 6px 0 0; }
+.top { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 14px; }
+.top li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; }
+.top li span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.top li span:last-child { font-variant-numeric: tabular-nums; color: var(--ink-2); }
+.note { font-size: 13px; color: var(--ink-2); background: var(--chip); border-radius: 8px; padding: 8px 10px; }
+
+.rank { padding: 14px 6px 8px 14px; }
+.rank h2 { font: 600 20px/1.1 var(--display); margin: 0 8px 10px 0; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.rank h2 small { font: 400 12.5px var(--body); color: var(--muted); }
+.rows { max-height: 420px; overflow-y: auto; padding-right: 8px; display: grid; gap: 1px; }
+.row {
+  display: grid; grid-template-columns: 30px minmax(0, 1fr) 90px 52px; gap: 8px; align-items: center;
+  font-size: 13.5px; padding: 5px 6px; border-radius: 6px; cursor: pointer; background: none; border: 0;
+  color: var(--ink); text-align: left; font-family: inherit; width: 100%;
+}
+.row:hover, .row.sel { background: var(--chip); }
+.row .code { color: var(--muted); font-variant-numeric: tabular-nums; }
+.row .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row .bar { height: 8px; background: var(--chip); border-radius: 0 4px 4px 0; overflow: hidden; }
+.row:hover .bar, .row.sel .bar { background: var(--surface); }
+.row .bar i { display: block; height: 100%; border-radius: 0 4px 4px 0; }
+.row .val { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.row.thin { color: var(--muted); }
+
+footer { color: var(--ink-2); font-size: 13.5px; display: grid; gap: 6px; max-width: 75ch; }
+footer h2 { font: 600 18px/1.2 var(--display); color: var(--ink); margin: 6px 0 0; }
+footer p { margin: 0; }
+footer a { color: inherit; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<style>
+.gaps { font-size: 13.5px; color: var(--ink-2); }
+.gaps summary { cursor: pointer; }
+.gaps ul { margin: 6px 0 0; padding-left: 18px; columns: 3 14ch; font-variant-numeric: tabular-nums; }
+.check { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 4px 0; }
+.check div { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: grid; gap: 2px; }
+.check b { font: 600 24px/1 var(--display); color: var(--ink); font-variant-numeric: tabular-nums; }
+.check span { font-size: 12.5px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">SNCF network · TGV, Intercités, TER</div>
+    <h1>Where French trains run late</h1>
+    <div class="status"><span id="status"></span></div>
+    <details class="gaps" id="gaps" hidden><summary id="gaps-sum"></summary><ul id="gaps-list"></ul></details>
+  </header>
+
+  <section class="board" id="board" aria-label="National summary"></section>
+
+  <section class="controls" aria-label="Map settings">
+    <div class="ctl"><span>Period</span><div class="seg" id="c-period"></div></div>
+    <div class="ctl"><span>Trains</span><div class="seg" id="c-mode"></div></div>
+    <div class="ctl"><span>Measure</span><div class="seg" id="c-metric"></div></div>
+  </section>
+
+  <div class="grid">
+    <div class="panel mapbox">
+      <svg id="map" role="img" aria-label="Map of French départements shaded by train disruption"></svg>
+      <div class="legend" id="legend"></div>
+      <div class="tip" id="tip" hidden></div>
+    </div>
+    <div class="side">
+      <div class="panel detail" id="detail"></div>
+      <div class="panel rank">
+        <h2><span id="rank-title">Ranking</span><small id="rank-sub"></small></h2>
+        <div class="rows" id="rows" role="list"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <h2>How it is counted</h2>
+    <p>Every 2 minutes SNCF publishes a real-time feed of every train running in France (TGV, Intercités, TER), with each train's delay at each station. This map uses an archive of that feed, compared with the timetable SNCF published for the same day.</p>
+    <p>Each stop a train makes at a station counts once, in the station's département. It is <b>late</b> if the train arrived more than 5 minutes after the timetable (at its first station, departed), which is SNCF's own definition. The feed gives delays in whole minutes, so that means 6 minutes or more. It is <b>cancelled</b> if the whole train or that stop was cancelled. A stop is only counted once the feed shows the train has actually reached it. Predictions for stops still ahead are never used. A train that runs late from Lyon onwards counts as late at every stop after Lyon, in each département it serves.</p>
+    <p><b>Coverage</b> is the share of the timetable's train stops that the feed confirmed. A département's day is left out when its coverage is under <span id="mincov"></span>, so gaps in the source never look like punctual trains.</p>
+    <h2>Accuracy check</h2>
+    <div id="check"></div>
+    <h2>Not included</h2>
+    <p>Paris-region Transilien and RER trains, which are a separate network. Extra trains not in the timetable. Cancellations announced before the day's timetable was published, since those trains are already gone from it (this matters on planned strike days). Days before <span id="first"></span>. Earlier archives exist, but checked against SNCF's published figures they under-reported disruption by 4 to 7 points, so they are left out.</p>
+    <p>Sources: SNCF real-time feed and timetable (<a href="https://transport.data.gouv.fr/datasets/horaires-sncf" target="_blank" rel="noopener">transport.data.gouv.fr</a>), archived by <a href="http://mirror.traines.eu/" target="_blank" rel="noopener">traines.eu</a>; SNCF station list and TER punctuality (<a href="https://ressources.data.sncf.com" target="_blank" rel="noopener">ressources.data.sncf.com</a>). Open Database License.</p>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const DATA = /*__DATA__*/null;
+
+const MODES = { all: "All trains", tgv: "TGV", ic: "Intercités", ter: "TER" };
+const METRICS = {
+  disrupted: { label: "Late or cancelled", short: "late or cancelled", bins: [5, 10, 15, 20, 30], unit: "%",
+               value: d => (d.late + d.canc) / d.seen * 100 },
+  late15:    { label: "Late 15+ min", short: "late 15 min or more", bins: [2, 4, 6, 10, 15], unit: "%",
+               value: d => d.late15 / d.seen * 100 },
+  canc:      { label: "Cancelled", short: "cancelled", bins: [1, 2, 4, 6, 10], unit: "%",
+               value: d => d.canc / d.seen * 100 },
+  avg:       { label: "Average delay", short: "average delay per stop", bins: [1, 2, 3, 5, 8], unit: " min",
+               value: d => d.avg },
+};
+const fmtDay = (s, opts) => new Date(s + "T12:00:00").toLocaleDateString("en-GB", opts || { day: "numeric", month: "short", year: "numeric" });
+const PERIODS = { day: fmtDay(DATA.latest, { weekday: "short", day: "numeric", month: "short" }), "7d": "7 days", "30d": "30 days", "12m": "12 months",
+                  all: "Since " + fmtDay(DATA.first_day, { month: "short", year: "numeric" }) };
+const MIN_SAMPLE = 30;
+const fmt = new Intl.NumberFormat("en-GB");
+const pct = v => v == null || !isFinite(v) ? "–" : (v < 10 ? v.toFixed(1) : String(Math.round(v)));
+const pctOf = (a, b) => b ? pct(a / b * 100) + "%" : "–";
+
+let state = { period: "30d", mode: "all", metric: "disrupted", sel: null };
+try { Object.assign(state, JSON.parse(localStorage.getItem("sncf-map-v2") || "{}"), { sel: null }); } catch (e) {}
+if (!DATA.windows[state.period]) state.period = "30d";
+const save = () => { try { localStorage.setItem("sncf-map-v2", JSON.stringify({ ...state, sel: null })); } catch (e) {} };
+
+const view = () => DATA.windows[state.period];
+const depts = () => view().modes[state.mode] || {};
+
+function ramp() {
+  const cs = getComputedStyle(document.documentElement);
+  return [0, 1, 2, 3, 4, 5].map(i => cs.getPropertyValue(`--r${i}`).trim());
+}
+function binOf(v, bins) { let i = 0; while (i < bins.length && v >= bins[i]) i++; return i; }
+
+function seg(id, options, key) {
+  const el = document.getElementById(id);
+  el.innerHTML = "";
+  for (const [value, label] of Object.entries(options)) {
+    const b = document.createElement("button");
+    b.type = "button"; b.id = `${id}-${value}`; b.textContent = label;
+    b.setAttribute("aria-pressed", String(state[key] === value));
+    b.onclick = () => { state[key] = value; save(); render(); };
+    el.appendChild(b);
+  }
+}
+
+function renderHeader() {
+  const w = view();
+  const span = w.from === w.to ? fmtDay(w.to, { weekday: "long", day: "numeric", month: "long", year: "numeric" })
+                               : `${fmtDay(w.from)} to ${fmtDay(w.to)}`;
+  // The newest day is normally yesterday; say so plainly if the archive has stopped publishing.
+  const lag = Math.floor((DATA.generated * 1000 - new Date(DATA.latest + "T23:59:59").getTime()) / 86400000);
+  document.getElementById("status").textContent =
+    `${span} · ${w.days} day${w.days === 1 ? "" : "s"} of data · the feed confirmed ${pct(w.coverage * 100)}% of timetabled train stops · ` +
+    (lag > 2 ? `no new day from the archive for ${lag} days` : "updated daily");
+  const gaps = document.getElementById("gaps");
+  gaps.hidden = !w.excluded.length;
+  if (w.excluded.length) {
+    document.getElementById("gaps-sum").textContent =
+      `${w.excluded.length} day${w.excluded.length === 1 ? "" : "s"} left out: the archived feed confirmed too few stops`;
+    document.getElementById("gaps-list").innerHTML = w.excluded.map(x =>
+      `<li>${fmtDay(x.day)} · ${pct(x.coverage * 100)}%</li>`).join("");
+  }
+}
+
+function renderBoard() {
+  const t = { seen: 0, late: 0, late15: 0, canc: 0, delay: 0 };
+  for (const d of Object.values(depts())) {
+    t.seen += d.seen; t.late += d.late; t.late15 += d.late15; t.canc += d.canc; t.delay += d.avg * (d.seen - d.canc);
+  }
+  const cells = [
+    ["Late or cancelled", pctOf(t.late + t.canc, t.seen), `of ${fmt.format(t.seen)} train stops`],
+    ["Late over 5 min", fmt.format(t.late), `${pctOf(t.late, t.seen)} of train stops`],
+    ["Late 15+ min", fmt.format(t.late15), `${pctOf(t.late15, t.seen)} · avg delay ${(t.delay / Math.max(t.seen - t.canc, 1)).toFixed(1)} min`],
+    ["Cancelled", fmt.format(t.canc), `${pctOf(t.canc, t.seen)} of train stops`],
+  ];
+  document.getElementById("board").innerHTML = cells.map(([k, v, s]) =>
+    `<div><span class="k">${k}</span><span class="v">${v}</span><span class="s">${s}</span></div>`).join("");
+}
+
+const svg = d3.select("#map");
+const W = 600, H = 600;
+svg.attr("viewBox", `0 0 ${W} ${H}`);
+const projection = d3.geoConicConformal().parallels([44, 49]).rotate([-3, 0]).fitExtent([[10, 10], [W - 10, H - 10]], DATA.geo);
+const path = d3.geoPath(projection);
+svg.append("defs").append("pattern").attr("id", "thin").attr("patternUnits", "userSpaceOnUse").attr("width", 5).attr("height", 5)
+  .attr("patternTransform", "rotate(45)")
+  .call(p => { p.append("rect").attr("width", 5).attr("height", 5).attr("class", "thin-bg");
+               p.append("line").attr("x1", 0).attr("y1", 0).attr("x2", 0).attr("y2", 5).attr("class", "thin-ln"); });
+const gDepts = svg.append("g");
+const tip = document.getElementById("tip");
+
+function renderMap() {
+  const M = METRICS[state.metric], colors = ramp(), data = depts();
+  const cs = getComputedStyle(document.documentElement);
+  svg.select(".thin-bg").attr("fill", cs.getPropertyValue("--nodata"));
+  svg.select(".thin-ln").attr("stroke", cs.getPropertyValue("--muted")).attr("stroke-width", 1.2);
+  gDepts.selectAll("path").data(DATA.geo.features, f => f.properties.code).join("path")
+    .attr("class", f => "dept" + (f.properties.code === state.sel ? " sel" : ""))
+    .attr("d", path)
+    .attr("fill", f => {
+      const d = data[f.properties.code];
+      if (!d) return cs.getPropertyValue("--nodata");
+      if (d.seen < MIN_SAMPLE) return "url(#thin)";
+      return colors[binOf(M.value(d), M.bins)];
+    })
+    .on("mousemove", (ev, f) => showTip(ev, f.properties.code))
+    .on("mouseleave", () => { tip.hidden = true; })
+    .on("click", (ev, f) => { state.sel = state.sel === f.properties.code ? null : f.properties.code; render(); });
+  gDepts.select(".sel").raise();
+  const ticks = M.bins.map(b => b + M.unit.trim());
+  document.getElementById("legend").innerHTML =
+    `<span>${M.label}${M.unit === "%" ? " (% of train stops)" : " (minutes)"}</span>` +
+    `<span class="ramp">${colors.map((c, i) => `<div><span class="sw" style="background:${c}"></span><span class="tick">${i === 0 ? "0" : ticks[i - 1]}</span></div>`).join("")}</span>` +
+    `<span class="other"><svg width="14" height="10"><rect width="14" height="10" fill="url(#thin)"/></svg>Under ${MIN_SAMPLE} stops</span>` +
+    `<span class="other"><span class="sw" style="background:var(--nodata)"></span>No ${state.mode === "all" ? "" : MODES[state.mode] + " "}trains</span>`;
+}
+
+function showTip(ev, code) {
+  const d = depts()[code], M = METRICS[state.metric];
+  let html = `<b>${DATA.names[code]} <span class="dim">${code}</span></b>`;
+  if (!d) html += `<span class="dim">No ${state.mode === "all" ? "" : MODES[state.mode] + " "}trains in this period</span>`;
+  else html += `<span class="big">${pct(M.value(d))}${M.unit}</span> <span class="dim">${M.short}</span><br>` +
+               `<span class="dim">${fmt.format(d.seen)} train stops · ${fmt.format(d.late)} late · ${fmt.format(d.canc)} cancelled</span>`;
+  tip.innerHTML = html;
+  tip.hidden = false;
+  const box = tip.parentElement.getBoundingClientRect();
+  let x = ev.clientX - box.left + 14, y = ev.clientY - box.top + 14;
+  if (x + tip.offsetWidth > box.width - 8) x = ev.clientX - box.left - tip.offsetWidth - 14;
+  if (y + tip.offsetHeight > box.height - 8) y = ev.clientY - box.top - tip.offsetHeight - 14;
+  tip.style.left = Math.max(4, x) + "px"; tip.style.top = Math.max(4, y) + "px";
+}
+
+function renderRank() {
+  const M = METRICS[state.metric], colors = ramp();
+  const rows = Object.entries(depts()).map(([code, d]) => ({ code, d, v: M.value(d) }))
+    .sort((a, b) => (b.d.seen >= MIN_SAMPLE) - (a.d.seen >= MIN_SAMPLE) || b.v - a.v);
+  const max = d3.max(rows, r => r.v) || 1;
+  document.getElementById("rank-title").textContent = `${MODES[state.mode]} · ${M.label.toLowerCase()}`;
+  document.getElementById("rank-sub").textContent = `${rows.length} départements`;
+  const el = document.getElementById("rows");
+  el.innerHTML = rows.map(r => {
+    const thin = r.d.seen < MIN_SAMPLE;
+    return `<button type="button" role="listitem" class="row${thin ? " thin" : ""}${r.code === state.sel ? " sel" : ""}" data-code="${r.code}"
+      title="${fmt.format(r.d.seen)} train stops">
+      <span class="code">${r.code}</span><span class="name">${DATA.names[r.code]}</span>
+      <span class="bar"><i style="width:${Math.max(2, r.v / max * 100)}%;background:${thin ? "var(--muted)" : colors[binOf(r.v, M.bins)]}"></i></span>
+      <span class="val">${pct(r.v)}${M.unit === "%" ? "%" : ""}</span></button>`;
+  }).join("") || `<p class="note" style="margin:0 8px 8px 0">No data for this selection.</p>`;
+  el.querySelectorAll(".row").forEach(b => b.onclick = () => {
+    state.sel = state.sel === b.dataset.code ? null : b.dataset.code; render();
+  });
+}
+
+function renderDetail() {
+  const el = document.getElementById("detail"), M = METRICS[state.metric], data = depts();
+  let code = state.sel;
+  if (!code) {
+    const worst = Object.entries(data).filter(([, d]) => d.seen >= MIN_SAMPLE).sort((a, b) => M.value(b[1]) - M.value(a[1]))[0];
+    code = worst && worst[0];
+  }
+  if (!code) { el.innerHTML = `<h2>France</h2><p class="sub">No data for this selection.</p>`; return; }
+  const d = data[code], name = DATA.names[code];
+  if (!d) { el.innerHTML = `<h2>${name}</h2><p class="sub">Département ${code}</p><p class="note">No ${state.mode === "all" ? "" : MODES[state.mode] + " "}trains stopped here in this period.</p>`; return; }
+  const kv = [
+    ["Train stops", fmt.format(d.seen)],
+    ["Late over 5 min", fmt.format(d.late)],
+    ["Late 15+ min", fmt.format(d.late15)],
+    ["Cancelled", fmt.format(d.canc)],
+    ["Avg delay", d.avg.toFixed(1) + " min"],
+    ["Days counted", `${d.days} of ${view().days}`],
+  ];
+  const top = (d.top || []).map(t =>
+    `<li><span>${t.name}</span><span>${pct(t.bad / t.seen * 100)}% of ${fmt.format(t.seen)}</span></li>`).join("");
+  el.innerHTML = `
+    <div><h2>${name}</h2><div class="sub">Département ${code}${state.sel ? "" : " · worst on this measure"}</div></div>
+    <div class="hero"><span class="n">${pct(M.value(d))}${M.unit}</span><span class="l">${M.short} · ${MODES[state.mode]}</span></div>
+    ${d.seen < MIN_SAMPLE ? `<p class="note">Small sample: ${d.seen} train stops in this period.</p>` : ""}
+    ${d.days < view().days ? `<p class="note">${view().days - d.days} day${view().days - d.days === 1 ? "" : "s"} left out here because the feed confirmed under ${Math.round(DATA.min_coverage * 100)}% of this département's train stops.</p>` : ""}
+    <dl class="kv">${kv.map(([k, x]) => `<div><dt>${k}</dt><dd>${x}</dd></div>`).join("")}</dl>
+    ${top ? `<h3>Hardest-hit stations · late or cancelled</h3><ul class="top">${top}</ul>` : ""}`;
+}
+
+function renderStatic() {
+  document.getElementById("mincov").textContent = Math.round(DATA.min_coverage * 100) + "%";
+  document.getElementById("first").textContent = fmtDay(DATA.first_day, { day: "numeric", month: "long", year: "numeric" });
+  const v = DATA.validation, el = document.getElementById("check");
+  if (!v) { el.innerHTML = `<p>No month overlaps SNCF's published figures yet.</p>`; return; }
+  const m = x => fmtDay(x + "-15", { month: "short", year: "numeric" });
+  el.innerHTML = `<p>SNCF publishes TER punctuality per region and month, counted per train at its last station. The same count, made from this dataset, compared for ${v.region_months} region-months (${m(v.months[0])} to ${m(v.months[v.months.length - 1])}):</p>
+    <div class="check">
+      <div><b>${v.median_gap_points.toFixed(1)} pts</b><span>median gap on "late or cancelled"</span></div>
+      <div><b>${Math.round(v.within_2_points * 100)}%</b><span>of region-months within 2 points</span></div>
+      <div><b>${v.correlation.toFixed(2)}</b><span>correlation with SNCF's figures</span></div>
+    </div>
+    <p>On average SNCF's figures are ${Math.abs(v.mean_difference_points).toFixed(1)} points ${v.mean_difference_points < 0 ? "higher" : "lower"} than this dataset's. The site is only rebuilt when this check passes.</p>`;
+}
+
+function render() {
+  seg("c-period", PERIODS, "period");
+  seg("c-mode", MODES, "mode");
+  seg("c-metric", Object.fromEntries(Object.entries(METRICS).map(([k, m]) => [k, m.label])), "metric");
+  renderHeader(); renderBoard(); renderMap(); renderRank(); renderDetail();
+}
+
+renderStatic();
+render();
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+</script>
+</body>
+</html>

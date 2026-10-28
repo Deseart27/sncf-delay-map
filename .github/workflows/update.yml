@@ -1,0 +1,60 @@
+name: Update map
+
+on:
+  schedule:
+    - cron: "17 */3 * * *"   # the mirror posts the previous day around noon Paris time
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: update-map
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - run: sudo apt-get install -y brotli
+      - run: pip install -r requirements.txt
+
+      - name: Add new days from the archive
+        run: python -m sncfmap.update --workers 2
+
+      - name: Check against SNCF's published TER figures
+        run: python -m sncfmap.validate
+
+      - name: Build the page
+        run: python -m sncfmap.build
+
+      - name: Commit new data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          if ! git diff --cached --quiet; then
+            git commit -m "data: add $(git diff --cached --name-only -- data/days | wc -l | tr -d ' ') day(s)"
+            git push
+          fi
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - id: deploy
+        uses: actions/deploy-pages@v4

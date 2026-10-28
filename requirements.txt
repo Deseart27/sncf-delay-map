@@ -1,0 +1,4 @@
+gtfs-realtime-bindings==3.0.0
+protobuf==7.36.2
+requests==2.34.2
+shapely==2.2.0

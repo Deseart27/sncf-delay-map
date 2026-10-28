@@ -1,0 +1,548 @@
+{
+ "region_months": 88,
+ "months": [
+  "2026-01",
+  "2026-02",
+  "2026-03",
+  "2026-04",
+  "2026-05",
+  "2026-06",
+  "2026-07",
+  "2026-08"
+ ],
+ "median_gap_points": 1.4,
+ "mean_difference_points": -1.02,
+ "correlation": 0.952,
+ "within_2_points": 0.761,
+ "rows": [
+  {
+   "month": "2026-01",
+   "region": "Auvergne-Rhône-Alpes",
+   "ours": 11.0,
+   "official": 13.62
+  },
+  {
+   "month": "2026-01",
+   "region": "Bourgogne-Franche-Comté",
+   "ours": 8.52,
+   "official": 9.49
+  },
+  {
+   "month": "2026-01",
+   "region": "Bretagne",
+   "ours": 9.1,
+   "official": 10.89
+  },
+  {
+   "month": "2026-01",
+   "region": "Centre Val-de-Loire",
+   "ours": 11.23,
+   "official": 14.07
+  },
+  {
+   "month": "2026-01",
+   "region": "Grand Est",
+   "ours": 8.81,
+   "official": 10.68
+  },
+  {
+   "month": "2026-01",
+   "region": "Hauts-de-France",
+   "ours": 15.23,
+   "official": 14.6
+  },
+  {
+   "month": "2026-01",
+   "region": "Normandie",
+   "ours": 12.94,
+   "official": 12.62
+  },
+  {
+   "month": "2026-01",
+   "region": "Nouvelle Aquitaine",
+   "ours": 14.82,
+   "official": 15.64
+  },
+  {
+   "month": "2026-01",
+   "region": "Occitanie",
+   "ours": 19.4,
+   "official": 19.61
+  },
+  {
+   "month": "2026-01",
+   "region": "Pays-de-la-Loire",
+   "ours": 13.01,
+   "official": 17.23
+  },
+  {
+   "month": "2026-01",
+   "region": "Provence Alpes Côte d'Azur",
+   "ours": 11.0,
+   "official": 10.19
+  },
+  {
+   "month": "2026-02",
+   "region": "Auvergne-Rhône-Alpes",
+   "ours": 9.7,
+   "official": 12.26
+  },
+  {
+   "month": "2026-02",
+   "region": "Bourgogne-Franche-Comté",
+   "ours": 7.27,
+   "official": 7.22
+  },
+  {
+   "month": "2026-02",
+   "region": "Bretagne",
+   "ours": 6.8,
+   "official": 7.25
+  },
+  {
+   "month": "2026-02",
+   "region": "Centre Val-de-Loire",
+   "ours": 13.32,
+   "official": 12.93
+  },
+  {
+   "month": "2026-02",
+   "region": "Grand Est",
+   "ours": 6.21,
+   "official": 8.01
+  },
+  {
+   "month": "2026-02",
+   "region": "Hauts-de-France",
+   "ours": 8.31,
+   "official": 10.29
+  },
+  {
+   "month": "2026-02",
+   "region": "Normandie",
+   "ours": 7.8,
+   "official": 8.81
+  },
+  {
+   "month": "2026-02",
+   "region": "Nouvelle Aquitaine",
+   "ours": 21.57,
+   "official": 22.08
+  },
+  {
+   "month": "2026-02",
+   "region": "Occitanie",
+   "ours": 25.46,
+   "official": 27.72
+  },
+  {
+   "month": "2026-02",
+   "region": "Pays-de-la-Loire",
+   "ours": 13.56,
+   "official": 15.44
+  },
+  {
+   "month": "2026-02",
+   "region": "Provence Alpes Côte d'Azur",
+   "ours": 11.62,
+   "official": 12.38
+  },
+  {
+   "month": "2026-03",
+   "region": "Auvergne-Rhône-Alpes",
+   "ours": 10.28,
+   "official": 11.98
+  },
+  {
+   "month": "2026-03",
+   "region": "Bourgogne-Franche-Comté",
+   "ours": 6.8,
+   "official": 7.12
+  },
+  {
+   "month": "2026-03",
+   "region": "Bretagne",
+   "ours": 4.23,
+   "official": 4.81
+  },
+  {
+   "month": "2026-03",
+   "region": "Centre Val-de-Loire",
+   "ours": 7.24,
+   "official": 8.61
+  },
+  {
+   "month": "2026-03",
+   "region": "Grand Est",
+   "ours": 5.97,
+   "official": 7.51
+  },
+  {
+   "month": "2026-03",
+   "region": "Hauts-de-France",
+   "ours": 10.47,
+   "official": 11.63
+  },
+  {
+   "month": "2026-03",
+   "region": "Normandie",
+   "ours": 6.84,
+   "official": 7.71
+  },
+  {
+   "month": "2026-03",
+   "region": "Nouvelle Aquitaine",
+   "ours": 9.02,
+   "official": 10.43
+  },
+  {
+   "month": "2026-03",
+   "region": "Occitanie",
+   "ours": 16.33,
+   "official": 16.52
+  },
+  {
+   "month": "2026-03",
+   "region": "Pays-de-la-Loire",
+   "ours": 6.91,
+   "official": 9.1
+  },
+  {
+   "month": "2026-03",
+   "region": "Provence Alpes Côte d'Azur",
+   "ours": 9.36,
+   "official": 10.55
+  },
+  {
+   "month": "2026-04",
+   "region": "Auvergne-Rhône-Alpes",
+   "ours": 8.26,
+   "official": 10.23
+  },
+  {
+   "month": "2026-04",
+   "region": "Bourgogne-Franche-Comté",
+   "ours": 4.97,
+   "official": 5.72
+  },
+  {
+   "month": "2026-04",
+   "region": "Bretagne",
+   "ours": 6.54,
+   "official": 7.65
+  },
+  {
+   "month": "2026-04",
+   "region": "Centre Val-de-Loire",
+   "ours": 7.52,
+   "official": 9.42
+  },
+  {
+   "month": "2026-04",
+   "region": "Grand Est",
+   "ours": 6.12,
+   "official": 7.67
+  },
+  {
+   "month": "2026-04",
+   "region": "Hauts-de-France",
+   "ours": 10.87,
+   "official": 12.84
+  },
+  {
+   "month": "2026-04",
+   "region": "Normandie",
+   "ours": 11.05,
+   "official": 12.33
+  },
+  {
+   "month": "2026-04",
+   "region": "Nouvelle Aquitaine",
+   "ours": 10.57,
+   "official": 12.79
+  },
+  {
+   "month": "2026-04",
+   "region": "Occitanie",
+   "ours": 16.13,
+   "official": 15.96
+  },
+  {
+   "month": "2026-04",
+   "region": "Pays-de-la-Loire",
+   "ours": 7.52,
+   "official": 10.65
+  },
+  {
+   "month": "2026-04",
+   "region": "Provence Alpes Côte d'Azur",
+   "ours": 9.04,
+   "official": 10.43
+  },
+  {
+   "month": "2026-05",
+   "region": "Auvergne-Rhône-Alpes",
+   "ours": 10.79,
+   "official": 12.87
+  },
+  {
+   "month": "2026-05",
+   "region": "Bourgogne-Franche-Comté",
+   "ours": 6.56,
+   "official": 6.32
+  },
+  {
+   "month": "2026-05",
+   "region": "Bretagne",
+   "ours": 7.86,
+   "official": 8.56
+  },
+  {
+   "month": "2026-05",
+   "region": "Centre Val-de-Loire",
+   "ours": 10.73,
+   "official": 12.64
+  },
+  {
+   "month": "2026-05",
+   "region": "Grand Est",
+   "ours": 7.95,
+   "official": 9.49
+  },
+  {
+   "month": "2026-05",
+   "region": "Hauts-de-France",
+   "ours": 9.51,
+   "official": 11.66
+  },
+  {
+   "month": "2026-05",
+   "region": "Normandie",
+   "ours": 8.3,
+   "official": 9.64
+  },
+  {
+   "month": "2026-05",
+   "region": "Nouvelle Aquitaine",
+   "ours": 12.77,
+   "official": 14.34
+  },
+  {
+   "month": "2026-05",
+   "region": "Occitanie",
+   "ours": 16.35,
+   "official": 16.55
+  },
+  {
+   "month": "2026-05",
+   "region": "Pays-de-la-Loire",
+   "ours": 9.48,
+   "official": 12.07
+  },
+  {
+   "month": "2026-05",
+   "region": "Provence Alpes Côte d'Azur",
+   "ours": 11.43,
+   "official": 12.56
+  },
+  {
+   "month": "2026-06",
+   "region": "Auvergne-Rhône-Alpes",
+   "ours": 14.77,
+   "official": 15.96
+  },
+  {
+   "month": "2026-06",
+   "region": "Bourgogne-Franche-Comté",
+   "ours": 11.24,
+   "official": 9.2
+  },
+  {
+   "month": "2026-06",
+   "region": "Bretagne",
+   "ours": 9.93,
+   "official": 7.08
+  },
+  {
+   "month": "2026-06",
+   "region": "Centre Val-de-Loire",
+   "ours": 18.81,
+   "official": 20.11
+  },
+  {
+   "month": "2026-06",
+   "region": "Grand Est",
+   "ours": 12.97,
+   "official": 14.19
+  },
+  {
+   "month": "2026-06",
+   "region": "Hauts-de-France",
+   "ours": 16.58,
+   "official": 18.49
+  },
+  {
+   "month": "2026-06",
+   "region": "Normandie",
+   "ours": 16.97,
+   "official": 19.7
+  },
+  {
+   "month": "2026-06",
+   "region": "Nouvelle Aquitaine",
+   "ours": 22.48,
+   "official": 21.15
+  },
+  {
+   "month": "2026-06",
+   "region": "Occitanie",
+   "ours": 20.79,
+   "official": 19.32
+  },
+  {
+   "month": "2026-06",
+   "region": "Pays-de-la-Loire",
+   "ours": 17.0,
+   "official": 15.68
+  },
+  {
+   "month": "2026-06",
+   "region": "Provence Alpes Côte d'Azur",
+   "ours": 12.52,
+   "official": 13.2
+  },
+  {
+   "month": "2026-07",
+   "region": "Auvergne-Rhône-Alpes",
+   "ours": 13.6,
+   "official": 14.81
+  },
+  {
+   "month": "2026-07",
+   "region": "Bourgogne-Franche-Comté",
+   "ours": 10.15,
+   "official": 8.63
+  },
+  {
+   "month": "2026-07",
+   "region": "Bretagne",
+   "ours": 9.55,
+   "official": 10.34
+  },
+  {
+   "month": "2026-07",
+   "region": "Centre Val-de-Loire",
+   "ours": 18.88,
+   "official": 19.55
+  },
+  {
+   "month": "2026-07",
+   "region": "Grand Est",
+   "ours": 7.9,
+   "official": 11.38
+  },
+  {
+   "month": "2026-07",
+   "region": "Hauts-de-France",
+   "ours": 10.58,
+   "official": 11.43
+  },
+  {
+   "month": "2026-07",
+   "region": "Normandie",
+   "ours": 14.61,
+   "official": 16.05
+  },
+  {
+   "month": "2026-07",
+   "region": "Nouvelle Aquitaine",
+   "ours": 20.25,
+   "official": 21.49
+  },
+  {
+   "month": "2026-07",
+   "region": "Occitanie",
+   "ours": 21.78,
+   "official": 22.04
+  },
+  {
+   "month": "2026-07",
+   "region": "Pays-de-la-Loire",
+   "ours": 15.02,
+   "official": 13.6
+  },
+  {
+   "month": "2026-07",
+   "region": "Provence Alpes Côte d'Azur",
+   "ours": 19.38,
+   "official": 16.52
+  },
+  {
+   "month": "2026-08",
+   "region": "Auvergne-Rhône-Alpes",
+   "ours": 11.09,
+   "official": 12.78
+  },
+  {
+   "month": "2026-08",
+   "region": "Bourgogne-Franche-Comté",
+   "ours": 9.13,
+   "official": 9.38
+  },
+  {
+   "month": "2026-08",
+   "region": "Bretagne",
+   "ours": 6.67,
+   "official": 7.09
+  },
+  {
+   "month": "2026-08",
+   "region": "Centre Val-de-Loire",
+   "ours": 13.31,
+   "official": 15.48
+  },
+  {
+   "month": "2026-08",
+   "region": "Grand Est",
+   "ours": 6.07,
+   "official": 8.87
+  },
+  {
+   "month": "2026-08",
+   "region": "Hauts-de-France",
+   "ours": 9.91,
+   "official": 11.54
+  },
+  {
+   "month": "2026-08",
+   "region": "Normandie",
+   "ours": 8.65,
+   "official": 10.54
+  },
+  {
+   "month": "2026-08",
+   "region": "Nouvelle Aquitaine",
+   "ours": 15.06,
+   "official": 17.54
+  },
+  {
+   "month": "2026-08",
+   "region": "Occitanie",
+   "ours": 16.31,
+   "official": 17.36
+  },
+  {
+   "month": "2026-08",
+   "region": "Pays-de-la-Loire",
+   "ours": 9.53,
+   "official": 12.8
+  },
+  {
+   "month": "2026-08",
+   "region": "Provence Alpes Côte d'Azur",
+   "ours": 17.37,
+   "official": 14.27
+  }
+ ],
+ "passed": true
+}
