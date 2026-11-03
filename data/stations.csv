@@ -209,7 +209,7 @@ StopPoint:OCEINTERCITES-87783456,Tournemire - Roquefort,ic,43.9698,3.016626
 StopPoint:OCELyria-85000109,Basel SBB,tgv,47.54740000,7.589560000
 StopPoint:OCELyria-85011031,Vallorbe,tgv,46.71242000,6.370570000
 StopPoint:OCELyria-87111849,Marne-la-Vallée Chessy,tgv,48.8698980,2.78262600
-StopPoint:OCELyria-87113001,Paris Est,tgv,48.8767420,2.35842400
+StopPoint:OCELyria-87113001,Paris Est,tgv,48.876742,2.358424
 StopPoint:OCELyria-87182063,Mulhouse,tgv,47.742691,7.34316
 StopPoint:OCELyria-87271494,Aéroport Charles de Gaulle 2 TGV,tgv,49.0036180,2.57081200
 StopPoint:OCELyria-87300822,Belfort - Montbéliard TGV,tgv,47.585105,6.897984
@@ -1133,7 +1133,7 @@ StopPoint:OCETrain TER-87334508,La Poterie,ter,48.092345,-1.630773
 StopPoint:OCETrain TER-87337378,Dives-sur-Mer Port-Guillaume,ter,49.29105600,-0.10101200
 StopPoint:OCETrain TER-87338517,Hoenheim Tram,ter,48.628622,7.758123
 StopPoint:OCETrain TER-87338525,Krimmeri Meinau,ter,48.563644,7.752614
-StopPoint:OCETrain TER-87338590,Monte-Carlo Country Club,ter,43.7543540,7.44820800
+StopPoint:OCETrain TER-87338590,Monte-Carlo Country Club,ter,43.754354,7.448208
 StopPoint:OCETrain TER-87342006,Béthune,ter,50.521454,2.640509
 StopPoint:OCETrain TER-87342014,Arras,ter,50.286971,2.781314
 StopPoint:OCETrain TER-87342030,Miraumont,ter,50.095928,2.734593
