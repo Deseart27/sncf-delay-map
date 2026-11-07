@@ -23762,5 +23762,78 @@
     1
    ]
   }
+ },
+ "2026-11-06": {
+  "gtfs": "2026-11-06",
+  "snapshots": 720,
+  "unreadable_snapshots": 0,
+  "empty_snapshots": 63,
+  "median_trains_in_feed": 1317,
+  "scheduled": 78731,
+  "confirmed": 81106,
+  "unconfirmed": 1082,
+  "coverage": 0.9987,
+  "ter_terminus": {
+   "Auvergne-Rhône-Alpes": [
+    1275,
+    200,
+    67
+   ],
+   "Bourgogne-Franche-Comté": [
+    562,
+    38,
+    7
+   ],
+   "Bretagne": [
+    420,
+    25,
+    9
+   ],
+   "Centre Val-de-Loire": [
+    340,
+    21,
+    10
+   ],
+   "Grand Est": [
+    1556,
+    121,
+    41
+   ],
+   "Hauts-de-France": [
+    1196,
+    175,
+    85
+   ],
+   "Normandie": [
+    367,
+    59,
+    7
+   ],
+   "Nouvelle Aquitaine": [
+    742,
+    79,
+    75
+   ],
+   "Occitanie": [
+    518,
+    74,
+    58
+   ],
+   "Pays-de-la-Loire": [
+    535,
+    35,
+    11
+   ],
+   "Provence Alpes Côte d'Azur": [
+    564,
+    69,
+    56
+   ],
+   "Île-de-France": [
+    3,
+    0,
+    0
+   ]
+  }
  }
 }
