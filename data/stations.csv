@@ -1690,11 +1690,11 @@ StopPoint:OCETrain TER-87571513,La Membrolle-sur-Choisille,ter,47.431335,0.64073
 StopPoint:OCETrain TER-87571539,Saint-Antoine-du-Rocher,ter,47.503699,0.616347
 StopPoint:OCETrain TER-87571547,Neuillé-Pont-Pierre,ter,47.557898,0.564769
 StopPoint:OCETrain TER-87571554,Saint-Paterne,ter,47.603993,0.478455
-StopPoint:OCETrain TER-87571604,Ballan,ter,47.33674700,0.617807000
-StopPoint:OCETrain TER-87571612,Druye,ter,47.30701900,0.535481000
-StopPoint:OCETrain TER-87571638,Azay-le-Rideau,ter,47.26615400,0.447600000
-StopPoint:OCETrain TER-87571653,Rivarennes,ter,47.26795600,0.361861000
-StopPoint:OCETrain TER-87571687,Chinon,ter,47.16307300,0.251645000
+StopPoint:OCETrain TER-87571604,Ballan,ter,47.336747,0.617807
+StopPoint:OCETrain TER-87571612,Druye,ter,47.307019,0.535481
+StopPoint:OCETrain TER-87571638,Azay-le-Rideau,ter,47.266154,0.4476
+StopPoint:OCETrain TER-87571653,Rivarennes,ter,47.267956,0.361861
+StopPoint:OCETrain TER-87571687,Chinon,ter,47.163073,0.251645
 StopPoint:OCETrain TER-87571794,Port Boulet,ter,47.248836,0.155648
 StopPoint:OCETrain TER-87571802,La Chapelle-sur-Loire,ter,47.251227,0.218481
 StopPoint:OCETrain TER-87571810,Saint-Patrice,ter,47.285659,0.309645
